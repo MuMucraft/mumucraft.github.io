@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MuMucraft · 我的世界语音生存服务器</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- 外部 CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ========== Toast 容器 ========== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ========== 导航栏 ========== -->
+    <nav class="navbar" id="mainNav">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-cube"></i> MuMucraft
+            </div>
+            <div class="nav-links">
+                <a class="active" data-page="home"><i class="fas fa-home"></i> 首页</a>
+                <a data-page="apply"><i class="fas fa-clipboard-list"></i> 白名单申请</a>
+                <a class="admin-btn" data-page="admin"><i class="fas fa-lock"></i> 后台管理</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============================================================= -->
+    <!-- ===================== 页面：首页 ============================= -->
+    <!-- ============================================================= -->
+    <div class="page active" id="page-home">
+        <section class="hero">
+            <div class="container">
+                <div class="mc-badge"><i class="fas fa-gamepad"></i> 离线 · 纯净 · 社区</div>
+                <h1>欢迎来到MuMucraft</h1>
+                <p>一个充满创造与冒险的 <strong>我的世界</strong> 服务器。我们致力于为每一位玩家提供最纯粹的游戏体验。</p>
+                <p style="font-size:15px; color:#8888aa;">
+                    <i class="fas fa-users"></i> 已注册玩家 <span id="totalPlayersDisplay">0</span> 人
+                </p>
+            </div>
+        </section>
+
+        <section class="features-section">
+            <div class="container">
+                <div class="section-title">✨ 服务器 <span>特色</span></div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="icon"><i class="fas fa-tree"></i></div>
+                        <h3>语音生存</h3>
+                        <p>原汁原味的生存体验，语音社交，还原最真实的 Minecraft 世界。</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon"><i class="fas fa-paint-brush"></i></div>
+                        <h3>建筑大师</h3>
+                        <p>定期举办建筑大赛，优秀作品将获得服务器展示位和专属称号。</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon"><i class="fas fa-microchip"></i></div>
+                        <h3>红石科技</h3>
+                        <p>支持各种红石机械与自动化装置，科技玩家可以随意制作红石装置</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon"><i class="fas fa-trophy"></i></div>
+                        <h3>社区活动</h3>
+                        <p>每月举办 PVP 赛、寻宝活动、节日庆典，让每位玩家都能参与其中。</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon"><i class="fas fa-shield-alt"></i></div>
+                        <h3>安全稳定</h3>
+                        <p>24 小时在线监控，反作弊系统完善，打造公平、安全的游戏环境。</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon"><i class="fas fa-handshake"></i></div>
+                        <h3>友好社区</h3>
+                        <p>玩家互助、老带新，营造温馨有爱的大家庭氛围。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact-section">
+            <div class="container">
+                <div class="section-title">📞 联系 <span>我们</span></div>
+                <div class="contact-grid">
+                    <div class="contact-item">
+                        <div class="icon"><i class="fas fa-user-tie"></i></div>
+                        <div class="label">服主 QQ</div>
+                        <div class="value"><a href="tencent://message/?uin=3074834744" target="_blank">3074834744</a></div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="icon"><i class="fas fa-qq"></i></div>
+                        <div class="label">服务器 QQ 群</div>
+                        <div class="value"><a href="https://qm.qq.com/q/LpbBDMSkco" target="_blank">点击加入群聊</a></div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="icon"><i class="fas fa-envelope"></i></div>
+                        <div class="label">官方邮箱</div>
+                        <div class="value"><a href="mailto:mc@example.com">mumucraft@zohomail.com</a></div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="icon"><i class="fas fa-globe"></i></div>
+                        <div class="label">服务器 IP</div>
+                        <div class="value" style="font-size:16px;">9666.fun:31853</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- ===================== 页面：白名单申请 ======================= -->
+    <!-- ============================================================= -->
+    <div class="page" id="page-apply">
+        <section class="apply-section">
+            <div class="container">
+                <div class="apply-wrapper">
+                    <div class="apply-form">
+                        <h2><i class="fas fa-pen-fancy" style="color:#f0b90b;"></i> 白名单申请</h2>
+                        <p class="sub">填写以下信息，管理员审核通过后即可加入服务器。<br>同一QQ可申请多个游戏ID。</p>
+                        <form id="applyForm">
+                            <div class="form-group">
+                                <label>游戏 ID <span class="required">*</span></label>
+                                <input type="text" id="applyGameId" placeholder="请输入你的游戏 ID" required>
+                            </div>
+                            <div class="form-group">
+                                <label>QQ 号 <span class="required">*</span></label>
+                                <input type="text" id="applyQQ" placeholder="请输入 QQ 号" required>
+                            </div>
+                            <div class="form-group">
+                                <label>年龄</label>
+                                <input type="number" id="applyAge" placeholder="请输入年龄（选填）" min="1" max="120">
+                            </div>
+                            <div class="form-group">
+                                <label>自我介绍 / 申请理由 <span class="required">*</span></label>
+                                <textarea id="applyReason" placeholder="简单介绍一下自己，以及为什么想加入我们..." required></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn" id="applySubmitBtn">
+                                <i class="fas fa-paper-plane"></i> 提交申请
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="apply-status" id="queryArea">
+                        <h2><i class="fas fa-search" style="color:#f0b90b;"></i> 白名单审核查询</h2>
+                        <p class="sub">输入你的 QQ 号，即可查看所有申请记录及审核状态。</p>
+                        <div class="status-query">
+                            <input type="text" id="queryQQ" placeholder="请输入 QQ 号">
+                            <button id="queryBtn"><i class="fas fa-search"></i> 查询</button>
+                        </div>
+                        <div class="status-result" id="statusResult">
+                            <div class="empty"><i class="fas fa-inbox"></i> 输入 QQ 号后点击查询</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- ===================== 页面：后台管理 ========================= -->
+    <!-- ============================================================= -->
+    <div class="page" id="page-admin">
+        <!-- 登录界面 -->
+        <div id="adminLoginArea">
+            <div class="admin-login">
+                <h2><i class="fas fa-lock" style="color:#f0b90b;"></i> 管理员登录</h2>
+                <p>请输入管理员账号和密码</p>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label>账号</label>
+                        <input type="text" id="loginUser" placeholder="请输入用户名" value="MuopggAdmin">
+                    </div>
+                    <div class="form-group">
+                        <label>密码</label>
+                        <input type="password" id="loginPass" placeholder="请输入密码">
+                    </div>
+                    <button type="submit" class="login-btn"><i class="fas fa-sign-in-alt"></i> 登 录</button>
+                    <div class="error-msg" id="loginError"></div>
+                    <p style="margin-top:12px; font-size:14px;">
+                        <a href="#" id="forgotPasswordLink" style="color:#8888aa; text-decoration:underline;">忘记密码？使用初始密码重置</a>
+                    </p>
+                </form>
+                <p style="margin-top:16px; font-size:13px; color:#555577;">默认账号 MuopggAdmin / 初始密码 muop123ggp</p>
+            </div>
+        </div>
+
+        <!-- 管理面板 -->
+        <div id="adminPanelArea" style="display:none;">
+            <section class="admin-panel">
+                <div class="container">
+                    <div class="admin-header">
+                        <h1><i class="fas fa-tachometer-alt" style="color:#f0b90b;"></i> 白名单管理 <small>后台系统</small></h1>
+                        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                            <button class="change-user-btn" id="changeUsernameBtn"><i class="fas fa-user-edit"></i> 更改用户名</button>
+                            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> 退出</button>
+                        </div>
+                    </div>
+
+                    <!-- 统计 -->
+                    <div class="stats-grid" id="statsGrid">
+                        <div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">总申请</div></div>
+                        <div class="stat-card pending"><div class="num" id="statPending">0</div><div class="label">待审核</div></div>
+                        <div class="stat-card approved"><div class="num" id="statApproved">0</div><div class="label">已通过</div></div>
+                        <div class="stat-card rejected"><div class="num" id="statRejected">0</div><div class="label">已拒绝</div></div>
+                    </div>
+
+                    <!-- 工具栏 -->
+                    <div class="toolbar">
+                        <div class="search-box">
+                            <input type="text" id="searchInput" placeholder="🔍 搜索 游戏ID / QQ号...">
+                        </div>
+                        <div class="filter-box">
+                            <select id="filterStatus">
+                                <option value="all">全部状态</option>
+                                <option value="pending">待审核</option>
+                                <option value="approved">已通过</option>
+                                <option value="rejected">已拒绝</option>
+                            </select>
+                            <button class="clear-btn" id="clearFilterBtn"><i class="fas fa-undo"></i> 重置</button>
+                        </div>
+                    </div>
+
+                    <!-- 表格 -->
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>游戏 ID</th>
+                                    <th>QQ 号</th>
+                                    <th>年龄</th>
+                                    <th>申请理由</th>
+                                    <th>申请时间</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminTableBody">
+                                <!-- 由 JS 动态渲染 -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <p style="margin-top:16px; color:#666688; font-size:13px; text-align:right;">
+                        共 <span id="rowCount">0</span> 条记录
+                    </p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- ========== 页脚 ========== -->
+    <div class="footer">
+        <div class="container">
+            <p>© 2026 <span>MuMuctaft</span> · 我的世界服务器 · 用 ❤️ 打造</p>
+        </div>
+    </div>
+
+    <!-- ========== 强制更改密码模态框 ========== -->
+    <div class="modal-overlay" id="changePasswordModal" style="display:none;">
+        <div class="modal-box">
+            <h2><i class="fas fa-key" style="color:#f0b90b;"></i> 强制更改密码</h2>
+            <p>检测到您正在使用初始密码，为了安全请立即修改。</p>
+            <form id="changePasswordForm">
+                <div class="form-group">
+                    <label>新密码</label>
+                    <input type="password" id="newPassword" placeholder="请输入新密码" required>
+                </div>
+                <div class="form-group">
+                    <label>确认新密码</label>
+                    <input type="password" id="confirmPassword" placeholder="请再次输入新密码" required>
+                </div>
+                <button type="submit" class="submit-btn" style="width:100%;">确认修改</button>
+                <div class="error-msg" id="changePwError"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== 忘记密码重置模态框 ========== -->
+    <div class="modal-overlay" id="resetPasswordModal" style="display:none;">
+        <div class="modal-box">
+            <h2><i class="fas fa-undo-alt" style="color:#f0b90b;"></i> 重置密码（使用初始密码）</h2>
+            <p>请输入初始密码（默认 123456），验证通过后可设置新密码。</p>
+            <form id="resetPasswordForm">
+                <div class="form-group">
+                    <label>初始密码</label>
+                    <input type="password" id="initialPassword" placeholder="请输入初始密码" required>
+                </div>
+                <div class="form-group">
+                    <label>新密码</label>
+                    <input type="password" id="resetNewPassword" placeholder="请输入新密码" required>
+                </div>
+                <div class="form-group">
+                    <label>确认新密码</label>
+                    <input type="password" id="resetConfirmPassword" placeholder="请再次输入新密码" required>
+                </div>
+                <button type="submit" class="submit-btn" style="width:100%;">重置密码</button>
+                <div class="error-msg" id="resetPwError"></div>
+                <p style="margin-top:12px; font-size:13px; color:#666688;">
+                    <a href="#" id="closeResetModalLink">取消</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== 更改用户名模态框 ========== -->
+    <div class="modal-overlay" id="changeUsernameModal" style="display:none;">
+        <div class="modal-box">
+            <h2><i class="fas fa-user-cog" style="color:#f0b90b;"></i> 更改管理员用户名</h2>
+            <p>修改后，下次登录请使用新用户名。</p>
+            <form id="changeUsernameForm">
+                <div class="form-group">
+                    <label>当前密码 <span class="required">*</span></label>
+                    <input type="password" id="currentPwForUser" placeholder="请输入当前密码" required>
+                </div>
+                <div class="form-group">
+                    <label>新用户名 <span class="required">*</span></label>
+                    <input type="text" id="newUsername" placeholder="请输入新用户名" required>
+                </div>
+                <button type="submit" class="submit-btn" style="width:100%;">确认更改</button>
+                <div class="error-msg" id="changeUserError"></div>
+                <p style="margin-top:12px; font-size:13px; color:#666688;">
+                    <a href="#" id="closeUserModalLink">取消</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- 外部 JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
