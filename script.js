@@ -4,7 +4,7 @@
     // =============================================================
     // 1. Supabase 初始化
     // =============================================================
-    const SUPABASE_URL = 'https://ttdpqgjwpxdhtcqpifsc.supabase.co/rest/v1/';
+    const SUPABASE_URL = 'https://ttdpqgjwpxdhtcqpifsc.supabase.co';   // 去掉末尾的 /rest/v1/
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0ZHBxZ2p3cHhkaHRjcXBpZnNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM5MDExNDAsImV4cCI6MjA5OTQ3NzE0MH0.bt-yKJfnjTK-djdL6';
 
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
