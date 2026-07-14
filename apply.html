@@ -29,7 +29,7 @@
                 <div class="apply-form">
                     <h2><i class="fas fa-pen-fancy" style="color:#f0b90b;"></i> 白名单申请</h2>
                     <p class="sub">填写以下信息，管理员审核通过后即可加入服务器。<br>同一QQ可申请多个游戏ID。</p>
-                    <!-- ===== 修改点：增加确认 QQ 和承诺复选框 ===== -->
+                    <!-- ===== 修改点：增加群昵称，加群引导 ===== -->
                     <form id="applyForm">
                         <div class="form-group">
                             <label>游戏 ID <span class="required">*</span></label>
@@ -39,10 +39,15 @@
                             <label>QQ 号 <span class="required">*</span></label>
                             <input type="text" id="applyQQ" placeholder="请输入 QQ 号" required>
                         </div>
-                        <!-- 新增：确认 QQ 号 -->
                         <div class="form-group">
                             <label>确认 QQ 号 <span class="required">*</span></label>
                             <input type="text" id="applyQQConfirm" placeholder="请再次输入 QQ 号" required>
+                        </div>
+                        <!-- 新增：QQ群昵称 -->
+                        <div class="form-group">
+                            <label>QQ 群昵称 <span class="required">*</span></label>
+                            <input type="text" id="groupNickname" placeholder="请先加群（群号：965757731），填写你在群内的昵称" required>
+                            <small style="color:#8888aa; display:block; margin-top:4px;">管理员将根据昵称在群内核对身份，请务必填写正确。</small>
                         </div>
                         <div class="form-group">
                             <label>年龄</label>
@@ -52,7 +57,6 @@
                             <label>自我介绍 / 申请理由 <span class="required">*</span></label>
                             <textarea id="applyReason" placeholder="简单介绍一下自己，以及为什么想加入我们..." required></textarea>
                         </div>
-                        <!-- 新增：承诺复选框 -->
                         <div class="form-group" style="margin-top:10px;">
                             <label style="font-weight:normal; display:flex; align-items:center; gap:8px;">
                                 <input type="checkbox" id="agreeCheck" required>

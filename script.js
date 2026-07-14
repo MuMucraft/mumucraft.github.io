@@ -10,7 +10,7 @@
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // =============================================================
-    // 2. 管理员账户（localStorage）
+    // 2. 管理员账户
     // =============================================================
     const INITIAL_PASSWORD = 'muop123ggp';
     const PASSWORD_STORAGE_KEY = 'admin_password';
@@ -42,7 +42,7 @@
     }
 
     // =============================================================
-    // 3. 核心数据操作（Supabase）
+    // 3. 核心数据操作
     // =============================================================
     async function fetchApplications() {
         try {
@@ -59,7 +59,7 @@
         }
     }
 
-    async function submitApplication({ gameId, qq, age, reason }) {
+    async function submitApplication({ gameId, qq, age, reason, groupNickname }) {
         try {
             const { data, error } = await supabase
                 .from('whitelist')
@@ -69,7 +69,8 @@
                     age: age || '',
                     reason,
                     status: 'pending',
-                    qq_verified: false   // 新增：默认未验证
+                    qq_verified: false,
+                    group_nickname: groupNickname   // 新增
                 }])
                 .select();
             if (error) throw error;
@@ -98,7 +99,6 @@
         }
     }
 
-    // ===== 新增：标记 QQ 验证 =====
     async function markQQVerified(id) {
         try {
             const { error } = await supabase
@@ -153,7 +153,6 @@
     // =============================================================
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
 
-    // 首页：更新总人数
     if (currentPage === 'index.html') {
         updateTotalPlayers();
     }
@@ -166,7 +165,7 @@
     }
 
     // =============================================================
-    // 6. 申请页逻辑（包含校验）
+    // 6. 申请页逻辑
     // =============================================================
     if (currentPage === 'apply.html') {
         const applyForm = document.getElementById('applyForm');
@@ -174,16 +173,15 @@
             applyForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
 
-                // ---- 获取表单数据 ----
                 const gameId = document.getElementById('applyGameId').value.trim();
                 const qq = document.getElementById('applyQQ').value.trim();
                 const qqConfirm = document.getElementById('applyQQConfirm').value.trim();
+                const groupNickname = document.getElementById('groupNickname').value.trim();
                 const age = document.getElementById('applyAge').value.trim();
                 const reason = document.getElementById('applyReason').value.trim();
                 const agree = document.getElementById('agreeCheck').checked;
 
-                // ---- 校验 ----
-                if (!gameId || !qq || !qqConfirm || !reason) {
+                if (!gameId || !qq || !qqConfirm || !groupNickname || !reason) {
                     showToast('请完整填写所有必填项！', 'error');
                     return;
                 }
@@ -200,11 +198,9 @@
                     return;
                 }
 
-                // ---- 提交 ----
-                const result = await submitApplication({ gameId, qq, age, reason });
+                const result = await submitApplication({ gameId, qq, age, reason, groupNickname });
                 if (result) {
                     applyForm.reset();
-                    // 重置后清除复选框状态
                     document.getElementById('agreeCheck').checked = false;
                 }
             });
@@ -243,6 +239,7 @@
                             </div>
                             <div class="detail-grid">
                                 <div><span class="label">QQ 号：</span><span class="value">${a.qq}</span></div>
+                                <div><span class="label">群昵称：</span><span class="value">${a.group_nickname || '-'}</span></div>
                                 <div><span class="label">年龄：</span><span class="value">${a.age || '-'}</span></div>
                                 <div><span class="label">申请时间：</span><span class="value">${new Date(a.created_at).toLocaleString('zh-CN')}</span></div>
                                 <div><span class="label">申请理由：</span><span class="value">${a.reason}</span></div>
@@ -263,7 +260,7 @@
     }
 
     // =============================================================
-    // 7. 后台管理页逻辑
+    // 7. 后台管理页
     // =============================================================
     if (currentPage === 'admin.html') {
         let isAdminLoggedIn = false;
@@ -285,7 +282,6 @@
             }
         }
 
-        // 登录
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const user = document.getElementById('loginUser').value.trim();
@@ -456,7 +452,7 @@
         });
 
         // =============================================================
-        // 8. 渲染表格（新增验证状态列和按钮）
+        // 8. 渲染表格（新增群昵称列）
         // =============================================================
         async function renderAdminTable() {
             const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
@@ -466,7 +462,8 @@
             if (searchVal) {
                 list = list.filter(a =>
                     a.gameId.toLowerCase().includes(searchVal) ||
-                    a.qq.includes(searchVal)
+                    a.qq.includes(searchVal) ||
+                    (a.group_nickname && a.group_nickname.toLowerCase().includes(searchVal))
                 );
             }
             if (filterVal !== 'all') {
@@ -476,7 +473,7 @@
 
             const tbody = document.getElementById('adminTableBody');
             if (list.length === 0) {
-                tbody.innerHTML = `<tr class="empty-row"><td colspan="9">📭 暂无申请记录</td></tr>`;
+                tbody.innerHTML = `<tr class="empty-row"><td colspan="10">📭 暂无申请记录</td></tr>`;
                 document.getElementById('rowCount').textContent = '0';
                 updateStats(list);
                 return;
@@ -491,7 +488,6 @@
                 };
                 const ageDisplay = a.age || '-';
                 const reasonDisplay = a.reason.length > 18 ? a.reason.slice(0, 18) + '…' : a.reason;
-                // 验证状态
                 const verifiedBadge = a.qq_verified
                     ? '<span style="color:#4caf50;">✅ 已验证</span>'
                     : '<span style="color:#ff9800;">⏳ 未验证</span>';
@@ -501,6 +497,7 @@
                         <td>${idx + 1}</td>
                         <td><strong>${a.gameId}</strong></td>
                         <td>${a.qq}</td>
+                        <td>${a.group_nickname || '-'}</td>
                         <td>${ageDisplay}</td>
                         <td title="${a.reason}">${reasonDisplay}</td>
                         <td style="font-size:13px; color:#8888aa;">${new Date(a.created_at).toLocaleString('zh-CN')}</td>
@@ -521,7 +518,6 @@
             tbody.innerHTML = html;
             document.getElementById('rowCount').textContent = list.length;
 
-            // 绑定按钮事件
             tbody.querySelectorAll('.approve-btn, .reject-btn, .delete-btn, .verify-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const id = parseInt(this.dataset.id);
@@ -533,9 +529,6 @@
             updateStats(list);
         }
 
-        // =============================================================
-        // 9. 操作处理（包含验证）
-        // =============================================================
         async function handleAdminAction(id, action) {
             if (!isAdminLoggedIn) {
                 showToast('请先登录管理员账号', 'error');
@@ -557,9 +550,6 @@
             renderAdminTable();
         }
 
-        // =============================================================
-        // 10. 统计
-        // =============================================================
         function updateStats(list) {
             if (!list) {
                 fetchApplications().then(all => {
@@ -584,9 +574,7 @@
             document.getElementById('statRejected').textContent = rejected;
         }
 
-        // =============================================================
-        // 11. 搜索/过滤/重置
-        // =============================================================
+        // 搜索/过滤/重置
         document.getElementById('searchInput').addEventListener('input', renderAdminTable);
         document.getElementById('filterStatus').addEventListener('change', renderAdminTable);
         document.getElementById('clearFilterBtn').addEventListener('click', function() {
@@ -596,7 +584,6 @@
             showToast('已重置筛选条件', 'info');
         });
 
-        // 初始化后台
         checkAdminSession();
     }
 

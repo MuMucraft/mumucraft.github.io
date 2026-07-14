@@ -42,7 +42,7 @@
                     <a href="#" id="forgotPasswordLink" style="color:#8888aa; text-decoration:underline;">忘记密码？使用初始密码重置</a>
                 </p>
             </form>
-            <!-- ===== 已删除显示默认账号密码的 <p> 标签，避免泄露 ===== -->
+            <!-- 已删除显示默认账号密码的 <p> 标签 -->
         </div>
     </div>
 
@@ -86,11 +86,11 @@
                                 <th>#</th>
                                 <th>游戏 ID</th>
                                 <th>QQ 号</th>
+                                <th>群昵称</th>      <!-- 新增 -->
                                 <th>年龄</th>
                                 <th>申请理由</th>
                                 <th>申请时间</th>
                                 <th>状态</th>
-                                <!-- ===== 新增：验证状态列 ===== -->
                                 <th>验证状态</th>
                                 <th>操作</th>
                             </tr>
@@ -107,7 +107,7 @@
         </section>
     </div>
 
-    <!-- ========== 强制更改密码模态框 ========== -->
+    <!-- ========== 模态框（与之前相同） ========== -->
     <div class="modal-overlay" id="changePasswordModal" style="display:none;">
         <div class="modal-box">
             <h2><i class="fas fa-key" style="color:#f0b90b;"></i> 强制更改密码</h2>
@@ -127,7 +127,6 @@
         </div>
     </div>
 
-    <!-- ========== 忘记密码重置模态框 ========== -->
     <div class="modal-overlay" id="resetPasswordModal" style="display:none;">
         <div class="modal-box">
             <h2><i class="fas fa-undo-alt" style="color:#f0b90b;"></i> 重置密码（使用初始密码）</h2>
@@ -154,7 +153,6 @@
         </div>
     </div>
 
-    <!-- ========== 更改用户名模态框 ========== -->
     <div class="modal-overlay" id="changeUsernameModal" style="display:none;">
         <div class="modal-box">
             <h2><i class="fas fa-user-cog" style="color:#f0b90b;"></i> 更改管理员用户名</h2>
