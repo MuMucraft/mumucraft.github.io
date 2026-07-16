@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>联系我们 · MuMucraft</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .contact-hero {
+            padding: 60px 0 40px;
+            text-align: center;
+            background: radial-gradient(ellipse at center top, #1a1a3e 0%, #0d0d1a 70%);
+            border-bottom: 1px solid #2a2a4a;
+        }
+        .contact-hero h1 {
+            font-size: 42px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #f0b90b, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .contact-hero p {
+            color: #a0a0b8;
+            font-size: 18px;
+            max-width: 600px;
+            margin: 10px auto 0;
+        }
+        .contact-grid-extended {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 24px;
+            padding: 40px 0 60px;
+        }
+        .contact-item-extended {
+            background: #18182e;
+            padding: 30px 20px;
+            border-radius: 16px;
+            border: 1px solid #2a2a4a;
+            text-align: center;
+            transition: 0.3s;
+            text-decoration: none;
+            color: #e0e0e0;
+            display: block;
+        }
+        .contact-item-extended:hover {
+            transform: translateY(-6px);
+            border-color: #f0b90b;
+            box-shadow: 0 12px 40px rgba(240, 185, 11, 0.1);
+            color: #f0b90b;
+        }
+        .contact-item-extended .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            color: #f0b90b;
+        }
+        .contact-item-extended .platform {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .contact-item-extended .handle {
+            font-size: 14px;
+            color: #8888aa;
+            margin-top: 4px;
+        }
+        .back-link {
+            text-align: center;
+            margin: 20px 0 40px;
+        }
+        .back-link a {
+            color: #f0b90b;
+            font-weight: 600;
+        }
+        .back-link a:hover {
+            color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo"><i class="fas fa-cube"></i> MuMucraft</div>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> 首页</a>
+                <a href="apply.html"><i class="fas fa-clipboard-list"></i> 白名单申请</a>
+                <a class="active" href="contact.html"><i class="fas fa-address-card"></i> 联系我们</a>
+                <a class="admin-btn" href="admin.html"><i class="fas fa-lock"></i> 后台管理</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="contact-hero">
+        <div class="container">
+            <h1>📬 联系我们</h1>
+            <p>通过以下渠道找到我们，加入社区，获取最新资讯。</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="contact-grid-extended">
+            <a href="tencent://message/?uin=3074834744" target="_blank" class="contact-item-extended">
+                <div class="icon"><i class="fas fa-user-tie"></i></div>
+                <div class="platform">服主 QQ</div>
+                <div class="handle">3074834744</div>
+            </a>
+            <a href="https://qm.qq.com/q/LpbBDMSkco" target="_blank" class="contact-item-extended">
+                <div class="icon"><i class="fas fa-qq"></i></div>
+                <div class="platform">QQ 群</div>
+                <div class="handle">点击加入</div>
+            </a>
+            <a href="mailto:mumucraft@zohomail.com" target="_blank" class="contact-item-extended">
+                <div class="icon"><i class="fas fa-envelope"></i></div>
+                <div class="platform">官方邮箱</div>
+                <div class="handle">mumucraft@zohomail.com</div>
+            </a>
+            <a href="#" target="_blank" class="contact-item-extended">
+                <div class="icon"><i class="fab fa-github"></i></div>
+                <div class="platform">GitHub</div>
+                <div class="handle">@MuMucraft</div>
+            </a>
+            <a href="#" target="_blank" class="contact-item-extended">
+                <div class="icon"><i class="fab fa-twitter"></i></div>
+                <div class="platform">Twitter</div>
+                <div class="handle">@MuMucraft</div>
+            </a>
+            <a href="#" target="_blank" class="contact-item-extended">
+                <div class="icon"><i class="fab fa-youtube"></i></div>
+                <div class="platform">YouTube</div>
+                <div class="handle">MuMucraft</div>
+            </a>
+            <a href="#" target="_blank" class="contact-item-extended">
+                <div class="icon"><i class="fab fa-discord"></i></div>
+                <div class="platform">Discord</div>
+                <div class="handle">邀请链接</div>
+            </a>
+            <a href="#" target="_blank" class="contact-item-extended">
+                <div class="icon"><i class="fab fa-tiktok"></i></div>
+                <div class="platform">TikTok</div>
+                <div class="handle">@MuMucraft</div>
+            </a>
+        </div>
+
+        <div class="back-link">
+            <a href="index.html"><i class="fas fa-arrow-left"></i> 返回首页</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <p>© 2026 <span>MuMuctaft</span> · 我的世界服务器 · 用 ❤️ 打造</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

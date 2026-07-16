@@ -59,8 +59,13 @@
         }
     }
 
-    async function submitApplication({ gameId, qq, age, reason, groupNickname }) {
+    async function submitApplication({ gameId, qq, age, reason, groupNickname, version, isOriginal, hasMultipleAccounts }) {
         try {
+            // 如果版本是基岩版，isOriginal 设为 null（不适用）
+            let finalIsOriginal = isOriginal;
+            if (version === '基岩版') {
+                finalIsOriginal = null;
+            }
             const { data, error } = await supabase
                 .from('whitelist')
                 .insert([{
@@ -70,7 +75,10 @@
                     reason,
                     status: 'pending',
                     qq_verified: false,
-                    group_nickname: groupNickname   // 新增
+                    group_nickname: groupNickname,
+                    version: version,
+                    is_original: finalIsOriginal,
+                    has_multiple_accounts: hasMultipleAccounts === '是' ? true : false
                 }])
                 .select();
             if (error) throw error;
@@ -165,10 +173,26 @@
     }
 
     // =============================================================
-    // 6. 申请页逻辑
+    // 6. 申请页逻辑（含版本联动隐藏正版）
     // =============================================================
     if (currentPage === 'apply.html') {
         const applyForm = document.getElementById('applyForm');
+        const gameVersion = document.getElementById('gameVersion');
+        const originalGroup = document.getElementById('originalGroup');
+        const isOriginalSelect = document.getElementById('isOriginal');
+
+        // 监听版本变化
+        gameVersion.addEventListener('change', function() {
+            if (this.value === '基岩版') {
+                originalGroup.style.display = 'none';
+                isOriginalSelect.removeAttribute('required');
+                isOriginalSelect.value = ''; // 清空选值
+            } else {
+                originalGroup.style.display = 'block';
+                isOriginalSelect.setAttribute('required', 'required');
+            }
+        });
+
         if (applyForm) {
             applyForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
@@ -177,12 +201,21 @@
                 const qq = document.getElementById('applyQQ').value.trim();
                 const qqConfirm = document.getElementById('applyQQConfirm').value.trim();
                 const groupNickname = document.getElementById('groupNickname').value.trim();
+                const version = gameVersion.value;
+                let isOriginal = isOriginalSelect.value;
+                const hasMultipleAccounts = document.getElementById('hasMultipleAccounts').value;
                 const age = document.getElementById('applyAge').value.trim();
                 const reason = document.getElementById('applyReason').value.trim();
                 const agree = document.getElementById('agreeCheck').checked;
 
-                if (!gameId || !qq || !qqConfirm || !groupNickname || !reason) {
+                // 基础必填校验（正版字段若隐藏则不校验）
+                if (!gameId || !qq || !qqConfirm || !groupNickname || !version || !hasMultipleAccounts || !reason) {
                     showToast('请完整填写所有必填项！', 'error');
+                    return;
+                }
+                // 如果正版可见则必须选择
+                if (originalGroup.style.display !== 'none' && !isOriginal) {
+                    showToast('请选择是否为正版玩家！', 'error');
                     return;
                 }
                 if (qq !== qqConfirm) {
@@ -198,15 +231,29 @@
                     return;
                 }
 
-                const result = await submitApplication({ gameId, qq, age, reason, groupNickname });
+                // 如果版本是基岩版，将 isOriginal 设为 null（由 submitApplication 处理）
+                const result = await submitApplication({
+                    gameId,
+                    qq,
+                    age,
+                    reason,
+                    groupNickname,
+                    version,
+                    isOriginal: version === '基岩版' ? null : isOriginal,
+                    hasMultipleAccounts
+                });
                 if (result) {
                     applyForm.reset();
                     document.getElementById('agreeCheck').checked = false;
+                    // 重置显示（默认显示正版）
+                    originalGroup.style.display = 'block';
+                    isOriginalSelect.setAttribute('required', 'required');
+                    gameVersion.value = '';
                 }
             });
         }
 
-        // 查询功能
+        // 查询功能（保持不变）
         const queryBtn = document.getElementById('queryBtn');
         if (queryBtn) {
             queryBtn.addEventListener('click', async function() {
@@ -240,6 +287,9 @@
                             <div class="detail-grid">
                                 <div><span class="label">QQ 号：</span><span class="value">${a.qq}</span></div>
                                 <div><span class="label">群昵称：</span><span class="value">${a.group_nickname || '-'}</span></div>
+                                <div><span class="label">版本：</span><span class="value">${a.version || '-'}</span></div>
+                                <div><span class="label">正版：</span><span class="value">${a.is_original === null ? '不适用' : (a.is_original ? '是' : '否')}</span></div>
+                                <div><span class="label">多账号：</span><span class="value">${a.has_multiple_accounts ? '是' : '否'}</span></div>
                                 <div><span class="label">年龄：</span><span class="value">${a.age || '-'}</span></div>
                                 <div><span class="label">申请时间：</span><span class="value">${new Date(a.created_at).toLocaleString('zh-CN')}</span></div>
                                 <div><span class="label">申请理由：</span><span class="value">${a.reason}</span></div>
@@ -260,7 +310,7 @@
     }
 
     // =============================================================
-    // 7. 后台管理页
+    // 7. 后台管理页（完整表格）
     // =============================================================
     if (currentPage === 'admin.html') {
         let isAdminLoggedIn = false;
@@ -452,7 +502,7 @@
         });
 
         // =============================================================
-        // 8. 渲染表格（新增群昵称列）
+        // 8. 渲染表格（包含版本、正版、多账号）
         // =============================================================
         async function renderAdminTable() {
             const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
@@ -473,7 +523,7 @@
 
             const tbody = document.getElementById('adminTableBody');
             if (list.length === 0) {
-                tbody.innerHTML = `<tr class="empty-row"><td colspan="10">📭 暂无申请记录</td></tr>`;
+                tbody.innerHTML = `<tr class="empty-row"><td colspan="13">📭 暂无申请记录</td></tr>`;
                 document.getElementById('rowCount').textContent = '0';
                 updateStats(list);
                 return;
@@ -492,12 +542,19 @@
                     ? '<span style="color:#4caf50;">✅ 已验证</span>'
                     : '<span style="color:#ff9800;">⏳ 未验证</span>';
 
+                const versionDisplay = a.version || '-';
+                const isOriginalDisplay = a.is_original === null ? '不适用' : (a.is_original ? '✅ 是' : '❌ 否');
+                const hasMultipleDisplay = a.has_multiple_accounts ? '✅ 是' : '❌ 否';
+
                 html += `
                     <tr data-id="${a.id}">
                         <td>${idx + 1}</td>
                         <td><strong>${a.gameId}</strong></td>
                         <td>${a.qq}</td>
                         <td>${a.group_nickname || '-'}</td>
+                        <td>${versionDisplay}</td>
+                        <td>${isOriginalDisplay}</td>
+                        <td>${hasMultipleDisplay}</td>
                         <td>${ageDisplay}</td>
                         <td title="${a.reason}">${reasonDisplay}</td>
                         <td style="font-size:13px; color:#8888aa;">${new Date(a.created_at).toLocaleString('zh-CN')}</td>
